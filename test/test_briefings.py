@@ -23,8 +23,8 @@ def test_61116():
     assert(b.count_occurrences("good") == 3)
     assert(b.count_occurrences("version") == 3)
     assert(b.count_occurrences("version", include_questions=True) == 7)
-    assert(len(filter(lambda x: x.is_question, b.passages)) == 45)
-    assert(len(filter(lambda x: not x.is_question, b.passages)) == 59)
+    assert(sum(map(lambda x: x.is_question, b.passages)) == 45)
+    assert(sum(map(lambda x: not x.is_question, b.passages)) == 59)
     assert(b.passages[0].text == "Good morning. Okay, let me give you a couple items. You have the statement on Senator Thurmond, so I won't repeat that, you already have it on the record, it's been distributed on the ground electronically and otherwise.")
     assert(b.passages[-1].text == "I didn't indicate that. I didn't indicate anything one way or another. I just said, he just died so people are now just looking at the arrangements. We'll let you know, of course; but it's too soon to say.")
 

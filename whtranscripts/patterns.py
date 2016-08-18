@@ -29,8 +29,7 @@ conference_speaker_subpatterns = [
     r'White House Press Secretary Robert L\. Gibbs[:\.] ',
     r'White House Principal Deputy Press Secretary Joshua R\. Earnest[:\.] ',
     r"White House [\w ]{0,20} [A-Za-z ]{0,25}[:\.] ",
-    #these are special cases due to some really dumb news stuff
-    #in the 1960s
+    # Particularly special cases:
     r"Robert Nixon, International News Service: ",
     r"William Hillman, Mutual Broadcasting System: ",
     r"Anthony Leviero, New York Times: ",
@@ -80,4 +79,4 @@ briefing_speaker_cleaner = re.compile(r":? $")
 footnote = re.compile(r"\[[1-9][0-9]?\.?\-?\]")
 bracketed_text = re.compile(r"[\[\(][^\]\)]*[\]\)]")
 
-punctuation = re.compile(r'[\s{}]+'.format(re.escape(string.punctuation)))
+punctuation = re.compile(r"[\s{}]+".format(re.escape(string.punctuation)))

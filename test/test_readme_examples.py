@@ -12,7 +12,7 @@ def test_parsing():
     from_url = wht.Conference.from_url(url)
     assert(from_url.president == "Barack Obama")
 
-    html = requests.get(url).content
+    html = requests.get(url).content.decode("windows-1251")
     from_html = wht.Conference(html)
     assert(from_html.president == "Barack Obama")
 

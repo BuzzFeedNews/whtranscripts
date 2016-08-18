@@ -32,8 +32,8 @@ class TranscriptSet(object):
         passages = flatten([ [ {
             "doc_id": t.doc_id,
             "date": t.date,
-            "speaker": (p.speaker or "").encode("utf-8"),
-            "text": (p.text or "").encode("utf-8")
+            "speaker": (p.speaker or ""),
+            "text": (p.text or "")
         } for p in t.passages ]
             for t in self.transcripts ])
         df = pd.DataFrame(passages)
@@ -48,17 +48,20 @@ class Transcript(object):
 
     @classmethod
     def from_path(cls, path):
-        with open(path) as f:
+        with open(path, "rb") as f:
             return cls(f.read())
         
     @classmethod
     def from_dir(cls, directory):
         paths = glob.glob(os.path.join(directory, "*html"))
-        docs = map(cls.from_path, paths)
+        docs = list(map(cls.from_path, paths))
         return docs
 
     def __init__(self, html):
-        self.html = html
+        if type(html) == bytes:
+            self.html = html.decode("windows-1251")
+        else:
+            self.html = html
         self._parse()
         self.passages = self._make_passages()
 
@@ -71,8 +74,9 @@ class Transcript(object):
         if self.doc_id in fixes.fixers:
             self.text = fixes.fixers[self.doc_id](self.text)
         else: pass
-        #This is a pretty aggressive decision to remove all bracketed text
+        # This is a pretty aggressive decision to remove all bracketed text
         self.text = re.sub(patterns.bracketed_text, "", self.text)
+        self.text = self.text.strip()
         try:
             date_str = dom.cssselect(".docdate")[0].text_content()
             self.date = dt.datetime.strptime(date_str, "%B %d, %Y").date()
@@ -87,7 +91,7 @@ class Transcript(object):
         for t in self.text.split("\n"):
             split_text = re.match(self.speaker_pattern, t).groups()
             speaker = split_text[0]
-            passage_text = split_text[1]
+            passage_text = split_text[1].strip()
             if speaker:
                 current_speaker = re.sub(self.speaker_cleaner_pattern, "", speaker.title()).strip("-").strip(",").strip(".").strip(":")
                 if len(current_speaker.split()) > 6 and current_speaker not in safe_speakers:
@@ -96,7 +100,7 @@ class Transcript(object):
             else: pass
             if passage_text and (not speaker) and \
                 (len(passage_text.split()) < 14) and \
-                (passage_text.strip()[-1] not in end_punctuation) and \
+                (passage_text[-1] not in end_punctuation) and \
                 (passage_text[0] not in ["-", '"']) and \
                 not any([ nh in passage_text for nh in not_header]):
                 current_topic = t

@@ -4,7 +4,7 @@ import lxml.html
 import requests
 import argparse
 import itertools
-import urlparse
+from six.moves.urllib.parse import urlparse
 import datetime as dt
 
 flatten = lambda x: list(itertools.chain.from_iterable(x))
@@ -23,7 +23,7 @@ START_YEARS = {
 }
 
 def norm_url(url):
-    parsed = urlparse.urlparse(url)
+    parsed = urlparse(url)
     normed_path = os.path.normpath(parsed.path)
     return "{0}://{1}{2}?{3}".format(
         parsed.scheme,

@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="whtranscripts",
-    version="0.0.0",
+    version="0.1.0",
     description="whtranscripts helps you fetch and parse transcripts from the American Presidency Project's press-briefing and presidential-news-conference transcripts.",
     long_description="",
     classifiers=[
@@ -11,9 +11,9 @@ setup(
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3.3"
+        "Programming Language :: Python :: 3.3",
+        "Programming Language :: Python :: 3.5",
     ],
     keywords="white house news conferences press briefings american presidency project",
     author="John Templon",
@@ -28,10 +28,12 @@ setup(
     install_requires=[
         "requests",
         "lxml",
-        "cssselect"
+        "cssselect",
+        "six"
     ],
     tests_require=[
         "nose",
+        "pandas",
     ],
     test_suite="test",
     entry_points={
